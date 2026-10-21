@@ -16,25 +16,22 @@ namespace Baigiakiweb.Data
 		public DbSet<CourseCategory> CourseCategories { get; set; }
 		public DbSet<CourseImage> CourseImages { get; set; }
 
+		public DbSet<Dish_BIT240237> Dishes_BIT240237 { get; set; }
+		public DbSet<DishCategory_BIT240237> DishCategories_BIT240237 { get; set; }
+		public DbSet<DishImage_BIT240237> DishImages_BIT240237 { get; set; }
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 
-			modelBuilder.Entity<Course>()
-				.HasIndex(c => new { c.CourseCategoryId, c.Name })
-				.IsUnique();
+			modelBuilder.Entity<Dish_BIT240237>()
+				.ToTable("Dishes_BIT240237");
 
-			modelBuilder.Entity<CourseCategory>()
-				.HasMany(c => c.Courses)
-				.WithOne(c => c.CourseCategory)
-				.HasForeignKey(c => c.CourseCategoryId)
-				.OnDelete(DeleteBehavior.Restrict);
+			modelBuilder.Entity<DishCategory_BIT240237>()
+				.ToTable("DishCategories_BIT240237");
 
-			modelBuilder.Entity<Course>()
-				.HasMany(c => c.CourseImages)
-				.WithOne(i => i.Course)
-				.HasForeignKey(i => i.CourseId)
-				.OnDelete(DeleteBehavior.Cascade);
+			modelBuilder.Entity<DishImage_BIT240237>()
+				.ToTable("DishImages_BIT240237");
 		}
 	}
 }

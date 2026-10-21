@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Baigiakiweb.Models.Dish_BIT240237>
+
+@{
+    ViewData["Title"] = "Dish Management";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Dish Management</h1>
+            <p>BIT240237 - Dish Management System</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            + Add New Dish
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Dish Name</th>
+                <th>Price</th>
+                <th>Preparation Time</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var dish in Model)
+                {
+                    <tr>
+                        <td>@dish.Id</td>
+                        <td>@dish.Name</td>
+                        <td>@dish.Price.ToString("N0")</td>
+                        <td>@dish.PreparationTime minutes</td>
+                        <td>@(dish.DishCategory?.ToString() ?? "N/A")</td>
+                        <td>@(dish.IsAvailable ? "Available" : "Unavailable")</td>
+                        <td>
+                            <a asp-action="Edit"
+                               asp-route-id="@dish.Id"
+                               class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Details"
+                               asp-route-id="@dish.Id"
+                               class="btn btn-info btn-sm">Details</a>
+                            <a asp-action="Delete"
+                               asp-route-id="@dish.Id"
+                               class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center">
+                        No dishes found. Please add a dish.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

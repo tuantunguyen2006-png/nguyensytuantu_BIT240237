@@ -16,7 +16,7 @@ namespace Baigiuakiweb.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -51,8 +51,7 @@ namespace Baigiuakiweb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseCategoryId", "Name")
-                        .IsUnique();
+                    b.HasIndex("CourseCategoryId");
 
                     b.ToTable("Courses");
                 });
@@ -104,12 +103,108 @@ namespace Baigiuakiweb.Migrations
                     b.ToTable("CourseImages");
                 });
 
+            modelBuilder.Entity("Baigiakiweb.Models.DishCategory_BIT240237", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("BIT240237_Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("BIT240237_Description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("BIT240237_Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DishCategories_BIT240237", (string)null);
+                });
+
+            modelBuilder.Entity("Baigiakiweb.Models.DishImage_BIT240237", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("BIT240237_Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int")
+                        .HasColumnName("BIT240237_DishId");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("BIT240237_ImageUrl");
+
+                    b.Property<bool>("IsThumbnail")
+                        .HasColumnType("bit")
+                        .HasColumnName("BIT240237_IsThumbnail");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("DishImages_BIT240237", (string)null);
+                });
+
+            modelBuilder.Entity("Baigiakiweb.Models.Dish_BIT240237", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("BIT240237_Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("BIT240237_Description");
+
+                    b.Property<int>("DishCategoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("BIT240237_DishCategoryId");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit")
+                        .HasColumnName("BIT240237_IsAvailable");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("BIT240237_Name");
+
+                    b.Property<int>("PreparationTime")
+                        .HasColumnType("int")
+                        .HasColumnName("BIT240237_PreparationTime");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("BIT240237_Price");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DishCategoryId");
+
+                    b.ToTable("Dishes_BIT240237", (string)null);
+                });
+
             modelBuilder.Entity("Baigiakiweb.Models.Course", b =>
                 {
                     b.HasOne("Baigiakiweb.Models.CourseCategory", "CourseCategory")
                         .WithMany("Courses")
                         .HasForeignKey("CourseCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CourseCategory");
@@ -126,6 +221,28 @@ namespace Baigiuakiweb.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("Baigiakiweb.Models.DishImage_BIT240237", b =>
+                {
+                    b.HasOne("Baigiakiweb.Models.Dish_BIT240237", "Dish")
+                        .WithMany("DishImages")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dish");
+                });
+
+            modelBuilder.Entity("Baigiakiweb.Models.Dish_BIT240237", b =>
+                {
+                    b.HasOne("Baigiakiweb.Models.DishCategory_BIT240237", "DishCategory")
+                        .WithMany("Dishes")
+                        .HasForeignKey("DishCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DishCategory");
+                });
+
             modelBuilder.Entity("Baigiakiweb.Models.Course", b =>
                 {
                     b.Navigation("CourseImages");
@@ -134,6 +251,16 @@ namespace Baigiuakiweb.Migrations
             modelBuilder.Entity("Baigiakiweb.Models.CourseCategory", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Baigiakiweb.Models.DishCategory_BIT240237", b =>
+                {
+                    b.Navigation("Dishes");
+                });
+
+            modelBuilder.Entity("Baigiakiweb.Models.Dish_BIT240237", b =>
+                {
+                    b.Navigation("DishImages");
                 });
 #pragma warning restore 612, 618
         }

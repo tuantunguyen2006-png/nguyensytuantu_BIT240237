@@ -8,70 +8,45 @@ namespace Baigiakiweb.Data
 	{
 		public static async Task SeedAsync(ApplicationDbContext context)
 		{
+			await context.Database.EnsureCreatedAsync();
+
+			// 1. Them danh muc khoa hoc
 			if (!await context.CourseCategories.AnyAsync())
 			{
 				context.CourseCategories.AddRange(
 					new CourseCategory
 					{
-						Name = "Lap trinh Web",
-						Description = "Cac khoa hoc phat trien web"
+						Name = "Lap trinh"
 					},
 					new CourseCategory
 					{
-						Name = "Lap trinh Ung dung",
-						Description = "Cac khoa hoc lap trinh ung dung"
+						Name = "Cong nghe thong tin"
 					},
 					new CourseCategory
 					{
-						Name = "Tri tue nhan tao",
-						Description = "Cac khoa hoc AI va Machine Learning"
+						Name = "Tri tue nhan tao"
 					}
 				);
 
 				await context.SaveChangesAsync();
 			}
 
+			// 2. Lay danh muc khoa hoc
+			var courseCategories = await context.CourseCategories
+				.ToDictionaryAsync(c => c.Name, c => c.Id);
+
+			// 3. Them khoa hoc
 			if (!await context.Courses.AnyAsync())
 			{
-				var categories = await context.CourseCategories
-					.ToDictionaryAsync(c => c.Name, c => c.Id);
-
 				context.Courses.AddRange(
 					new Course
 					{
-						Name = "ASP.NET Core MVC",
-						TuitionFee = 2500000,
+						Name = "C# co ban",
+						TuitionFee = 2000000,
 						Duration = 24,
 						IsActive = true,
-						Description = "Xay dung website voi ASP.NET Core MVC",
-						CourseCategoryId = categories["Lap trinh Web"]
-					},
-					new Course
-					{
-						Name = "ReactJS",
-						TuitionFee = 3000000,
-						Duration = 36,
-						IsActive = true,
-						Description = "Xay dung giao dien web voi ReactJS",
-						CourseCategoryId = categories["Lap trinh Web"]
-					},
-					new Course
-					{
-						Name = "Java OOP",
-						TuitionFee = 1800000,
-						Duration = 20,
-						IsActive = false,
-						Description = "Lap trinh huong doi tuong voi Java",
-						CourseCategoryId = categories["Lap trinh Ung dung"]
-					},
-					new Course
-					{
-						Name = "Python Co ban",
-						TuitionFee = 1500000,
-						Duration = 18,
-						IsActive = true,
-						Description = "Nhap mon lap trinh Python",
-						CourseCategoryId = categories["Lap trinh Ung dung"]
+						Description = "Nhap mon lap trinh C#",
+						CourseCategoryId = courseCategories["Lap trinh"]
 					},
 					new Course
 					{
@@ -80,7 +55,68 @@ namespace Baigiakiweb.Data
 						Duration = 48,
 						IsActive = true,
 						Description = "Nhap mon hoc may",
-						CourseCategoryId = categories["Tri tue nhan tao"]
+						CourseCategoryId = courseCategories["Tri tue nhan tao"]
+					}
+				);
+
+				await context.SaveChangesAsync();
+			}
+
+			// 4. Them danh muc mon an
+			if (!await context.DishCategories_BIT240237.AnyAsync())
+			{
+				context.DishCategories_BIT240237.AddRange(
+					new DishCategory_BIT240237
+					{
+						Name = "Mon chinh"
+					},
+					new DishCategory_BIT240237
+					{
+						Name = "Do uong"
+					},
+					new DishCategory_BIT240237
+					{
+						Name = "Trang mieng"
+					}
+				);
+
+				await context.SaveChangesAsync();
+			}
+
+			// 5. Lay danh muc mon an
+			var categories = await context.DishCategories_BIT240237
+				.ToDictionaryAsync(c => c.Name, c => c.Id);
+
+			// 6. Them du lieu mon an
+			if (!await context.Dishes_BIT240237.AnyAsync())
+			{
+				context.Dishes_BIT240237.AddRange(
+					new Dish_BIT240237
+					{
+						Name = "Pho bo",
+						Price = 50000,
+						PreparationTime = 15,
+						IsAvailable = true,
+						Description = "Pho bo truyen thong",
+						DishCategoryId = categories["Mon chinh"]
+					},
+					new Dish_BIT240237
+					{
+						Name = "Bun cha",
+						Price = 45000,
+						PreparationTime = 20,
+						IsAvailable = true,
+						Description = "Bun cha Ha Noi",
+						DishCategoryId = categories["Mon chinh"]
+					},
+					new Dish_BIT240237
+					{
+						Name = "Goi cuon",
+						Price = 30000,
+						PreparationTime = 10,
+						IsAvailable = true,
+						Description = "Goi cuon tuoi",
+						DishCategoryId = categories["Mon chinh"]
 					}
 				);
 
